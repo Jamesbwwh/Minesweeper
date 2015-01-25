@@ -1,4 +1,4 @@
 .idea/
-.sln
-.suo
-.pyproj
+*.sln
+*.suo
+*.pyproj
