@@ -1,5 +1,13 @@
 import gtk
 
+class Mines:
+
+    def generate():
+        pass
+
+    def sdfsdf():
+        pass
+
 class Minesweeper:
 
     def on_window1_destroy(self, object, data=None):
@@ -13,9 +21,9 @@ class Minesweeper:
         self.builder = gtk.Builder()
         self.builder.add_from_file(self.gladefile)
         self.builder.connect_signals(self)
-        self.window = self.builder.get_object("window1")
+        self.window = self.builder.get_object("Minesweeper")
         self.window.set_title("Minesweeper")
-        vbox = self.builder.get_object("vbox1")
+        vbox = self.builder.get_object("vBox")
         for i in range(10):
             hbox = gtk.HBox()
             vbox.pack_start(hbox, False, False, 0)
