@@ -21,28 +21,28 @@ def generate(difficulty):
             y = placeMine % width
             if mineField[x][y] != 9:
                 mineField[x][y] = 9
-                if x - 1 >= 0:
-                    if y - 1 >= 0:
+                if x - 1 >= 0: #Top
+                    if y - 1 >= 0: #Top-Left
                         if mineField[x - 1][y - 1] != 9:
                             mineField[x - 1][y - 1] += 1
                     if mineField[x - 1][y] != 9:
                         mineField[x - 1][y] += 1
-                    if y + 1 < width:
+                    if y + 1 < width: #Top-Right
                         if mineField[x - 1][y + 1] != 9:
                             mineField[x - 1][y + 1] += 1
-                if y - 1 >= 0:
+                if y - 1 >= 0: #Left
                     if mineField[x][y - 1] != 9:
                         mineField[x][y - 1] += 1
-                if y + 1 < width:
+                if y + 1 < width: #Right
                     if mineField[x][y + 1] != 9:
                         mineField[x][y + 1] += 1
-                if x + 1 < width:
-                    if y - 1 >= 0:
+                if x + 1 < width: #Bottom
+                    if y - 1 >= 0: #Bottom-Left
                         if mineField[x + 1][y - 1] != 9:
                             mineField[x + 1][y - 1] += 1
                     if mineField[x + 1][y] != 9:
                         mineField[x + 1][y] += 1
-                    if y + 1 < width:
+                    if y + 1 < width: #Bottom-Right
                         if mineField[x + 1][y + 1] != 9:
                             mineField[x + 1][y + 1] += 1
                 break
@@ -54,18 +54,23 @@ def exploreMineless(world,i,j):
         return
     if world[i][j] is 0:
         world[i][j] = 9
-        exploreMineless(world,i - 1,j) #up
-        exploreMineless(world,i + 1,j) #down
+        exploreMineless(world,i - 1,j - 1) #top-left
+        exploreMineless(world,i - 1,j) #top
+        exploreMineless(world,i - 1,j + 1) #top-right
         exploreMineless(world,i,j - 1) #left
         exploreMineless(world,i,j + 1) #right
-    label = gtk.Label(str(mineField[i][j]))
-    label.set_size_request(20, 20)
+        exploreMineless(world,i + 1,j - 1) #bottom-left
+        exploreMineless(world,i + 1,j) #bottom
+        exploreMineless(world,i + 1,j + 1) #bottom-right
     frame = frameField[i][j]
     widget = frame.get_child()
-    frame.remove(widget)
-    frame.add(label)
-    frame.set_shadow_type(gtk.SHADOW_OUT)
-    label.show()
+    if type(widget) is type(gtk.Button()):
+        frame.remove(widget)
+        label = gtk.Label(str(mineField[i][j]))
+        label.set_size_request(20, 20)
+        frame.add(label)
+        frame.set_shadow_type(gtk.SHADOW_OUT)
+        label.show()
 
 class About:
     def quit_event(self, widget):
@@ -127,23 +132,28 @@ class Minesweeper:
         md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "About")
         md.run()
 
-    def button_event(self, widget, i, j):
-        #str(mineField[i][j])
-        if mineField[i][j] is 9:
-            md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Explosion")
-            md.run()
-        elif mineField[i][j] is 0:
-            map = copy.deepcopy(mineField)
-            exploreMineless(map, i, j)
-            pass
-        else:
-            label = gtk.Label(str(mineField[i][j]))
-            label.set_size_request(20, 20)
-            frame = widget.parent
-            frame.remove(widget)
-            frame.add(label)
-            frame.set_shadow_type(gtk.SHADOW_OUT)
-            label.show()
+    def button_event(self, widget, event, i, j):
+        if event.button is 1:
+            if mineField[i][j] is 9:
+                md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Explosion")
+                md.run()
+            elif mineField[i][j] is 0:
+                map = copy.deepcopy(mineField)
+                exploreMineless(map, i, j)
+                pass
+            else:
+                label = gtk.Label(str(mineField[i][j]))
+                label.set_size_request(20, 20)
+                frame = widget.parent
+                frame.remove(widget)
+                frame.add(label)
+                frame.set_shadow_type(gtk.SHADOW_OUT)
+                label.show()
+        elif event.button is 3:
+            if widget.get_label() == "F":
+                widget.set_label("")
+            else:
+                widget.set_label("F")
 
     def __init__(self):
         global frameField
@@ -158,7 +168,7 @@ class Minesweeper:
             vbox.pack_start(hbox, False, False, 0)
             for j in range(len(mineField[0])):
                 button = gtk.Button()
-                button.connect("clicked", self.button_event, i, j)
+                button.connect("button_press_event", self.button_event, i, j)
                 button.set_size_request(20, 20)
                 frame = gtk.Frame()
                 frame.add(button)
