@@ -117,7 +117,8 @@ class Minesweeper:
         gtk.main_quit()
 
     def new_game_event(self, widget):
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "New Game")
+        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "New Game")
+        md.format_secondary_text("Create a new Game.")
         md.run()
 
     def options_event(self, widget):
@@ -129,13 +130,15 @@ class Minesweeper:
         md.run()
 
     def about_event(self, widget):
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "About")
+        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "About")
+        md.format_secondary_text("DSA Minesweeper.")
         md.run()
 
     def button_event(self, widget, event, i, j):
         if event.button is 1:
             if mineField[i][j] is 9:
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Explosion")
+                md.format_secondary_text("You lose !!.")
                 md.run()
             elif mineField[i][j] is 0:
                 map = copy.deepcopy(mineField)
