@@ -94,7 +94,7 @@ class Options:
         self.builder = gtk.Builder()
         self.builder.add_from_file("options.glade")
         self.builder.connect_signals(self)
-        self.window = self.builder.get_object("Options")
+        self.window = self.builder.get_object("window1")
         self.window.show_all()
 
 class Statistics:
@@ -108,7 +108,7 @@ class Statistics:
         self.builder = gtk.Builder()
         self.builder.add_from_file("statistics.glade")
         self.builder.connect_signals(self)
-        self.window = self.builder.get_object("Statistics")
+        self.window = self.builder.get_object("window1")
         self.window.show_all()
 
 class Minesweeper:
@@ -122,17 +122,13 @@ class Minesweeper:
         md.run()
 
     def options_event(self, widget):
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Options")
-        md.run()
+        options = Options()
 
     def statistics_event(self, widget):
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Statistics")
-        md.run()
+        stats = Statistics()
 
     def about_event(self, widget):
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "About")
-        md.format_secondary_text("DSA Minesweeper.")
-        md.run()
+        about = About()
 
     def button_event(self, widget, event, i, j):
         if event.button is 1:
