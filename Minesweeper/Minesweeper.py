@@ -138,6 +138,15 @@ class Minesweeper:
     def button_event(self, widget, event, i, j):
         if event.button is 1:
             if mineField[i][j] is 9:
+                
+                label = gtk.Label(str('X'))
+                label.set_size_request(20, 20)
+                frame = widget.parent
+                frame.remove(widget)
+                frame.add(label)
+                frame.set_shadow_type(gtk.SHADOW_OUT)
+                label.show()
+                
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Explosion")
                 md.format_secondary_text("You lose !!.")
                 md.run()
