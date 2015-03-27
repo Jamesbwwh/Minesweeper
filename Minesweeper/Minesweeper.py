@@ -66,7 +66,12 @@ def exploreMineless(world,i,j):
     widget = frame.get_child()
     if type(widget) is type(gtk.Button()):
         frame.remove(widget)
-        label = gtk.Label(str(mineField[i][j]))
+        
+        if str(mineField[i][j]) is '0':
+            label = gtk.Label(str( ))
+        else:
+            label = gtk.Label(str(mineField[i][j]))
+        
         label.set_size_request(20, 20)
         frame.add(label)
         frame.set_shadow_type(gtk.SHADOW_OUT)
