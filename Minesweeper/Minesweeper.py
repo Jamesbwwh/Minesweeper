@@ -119,7 +119,14 @@ class Minesweeper:
     def new_game_event(self, widget):
         md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "New Game")
         md.format_secondary_text("Create a new Game.")
-        md.run()
+        response=md.run()
+        if response==gtk.RESPONSE_OK:
+            md.destroy()
+            self.window.destroy()
+            gtk.main_quit()
+            generate(1)
+            main = Minesweeper()
+            gtk.main()
 
     def options_event(self, widget):
         options = Options()
@@ -133,9 +140,22 @@ class Minesweeper:
     def button_event(self, widget, event, i, j):
         if event.button is 1:
             if mineField[i][j] is 9:
-                md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Explosion")
-                md.format_secondary_text("You lose !!.")
-                md.run()
+                md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO, "Explosion")
+                md.format_secondary_text("You lose !!. Restart?")
+                response=md.run()
+                if response==gtk.RESPONSE_YES:
+                    gtk.main_quit()
+                    md.destroy()
+                    self.window.destroy()
+                    generate(1)
+                    main = Minesweeper()
+                    gtk.main()
+                else:
+                    md.destroy()
+                    self.window.destroy()
+                    gtk.main_quit()
+                #md.run()
+
             elif mineField[i][j] is 0:
                 map = copy.deepcopy(mineField)
                 exploreMineless(map, i, j)
