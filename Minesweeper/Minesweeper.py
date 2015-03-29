@@ -66,7 +66,12 @@ def exploreMineless(world,i,j):
     widget = frame.get_child()
     if type(widget) is type(gtk.Button()):
         frame.remove(widget)
-        label = gtk.Label(str(mineField[i][j]))
+    
+        if str(mineField[i][j]) is '0':
+            label = gtk.Label(str( ))
+        else:
+            label = gtk.Label(str(mineField[i][j]))
+            
         label.set_size_request(20, 20)
         frame.add(label)
         frame.set_shadow_type(gtk.SHADOW_OUT)
@@ -140,6 +145,15 @@ class Minesweeper:
     def button_event(self, widget, event, i, j):
         if event.button is 1:
             if mineField[i][j] is 9:
+                
+                label = gtk.Label(str('X'))
+                label.set_size_request(20, 20)
+                frame = widget.parent
+                frame.remove(widget)
+                frame.add(label)
+                frame.set_shadow_type(gtk.SHADOW_OUT)
+                label.show()
+                
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO, "Explosion")
                 md.format_secondary_text("You lose !!. Restart?")
                 response=md.run()
