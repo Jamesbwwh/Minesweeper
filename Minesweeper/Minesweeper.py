@@ -135,7 +135,6 @@ class Minesweeper:
             main = Minesweeper()
             gtk.main()
 
-
     def options_event(self, widget):
         md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Options")
         md.run()
@@ -153,14 +152,11 @@ class Minesweeper:
         app_window.set_size_request(500, 100)
         app_window.set_title("Hall of Fame")
 
-
         hbox_b = gtk.VBox(False, 0)
         app_window.add(hbox_b)
         with open("highscore.txt", "r") as ins:
             halloffame = []
             for line in ins:
-
-
                 label_b = gtk.Label(line)
                 label_b.show()
                 hbox_b.pack_start(label_b, False, False, 0)
@@ -181,10 +177,6 @@ class Minesweeper:
                 frame.add(label)
                 frame.set_shadow_type(gtk.SHADOW_OUT)
                 label.show()
-
-                #
-                # md.run()
-
 
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO, "Explosion")
                 md.format_secondary_text("You lose !!. Restart?")
@@ -207,9 +199,6 @@ class Minesweeper:
                     self.window.destroy()
                     gtk.main_quit()
                 #md.run()
-
-
-
 
             elif mineField[i][j] is 0:
                 map = copy.deepcopy(mineField)
@@ -276,10 +265,6 @@ class Minesweeper:
         dialog.destroy()
         print text
         #base this on a message dialog
-
-
-
-
 
     def __init__(self):
         global frameField
