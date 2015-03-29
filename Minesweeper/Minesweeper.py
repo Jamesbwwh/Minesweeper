@@ -66,12 +66,12 @@ def exploreMineless(world,i,j):
     widget = frame.get_child()
     if type(widget) is type(gtk.Button()):
         frame.remove(widget)
-    
+
         if str(mineField[i][j]) is '0':
             label = gtk.Label(str( ))
         else:
             label = gtk.Label(str(mineField[i][j]))
-            
+
         label.set_size_request(20, 20)
         frame.add(label)
         frame.set_shadow_type(gtk.SHADOW_OUT)
@@ -99,7 +99,7 @@ class Options:
         self.builder = gtk.Builder()
         self.builder.add_from_file("options.glade")
         self.builder.connect_signals(self)
-        self.window = self.builder.get_object("window1")
+        self.window = self.builder.get_object("Options")
         self.window.show_all()
 
 class Statistics:
@@ -113,7 +113,7 @@ class Statistics:
         self.builder = gtk.Builder()
         self.builder.add_from_file("statistics.glade")
         self.builder.connect_signals(self)
-        self.window = self.builder.get_object("window1")
+        self.window = self.builder.get_object("Statistics")
         self.window.show_all()
 
 class Minesweeper:
@@ -122,6 +122,8 @@ class Minesweeper:
         gtk.main_quit()
 
     def new_game_event(self, widget):
+        # md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "New Game")
+        # md.run()
         md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "New Game")
         md.format_secondary_text("Create a new Game.")
         response=md.run()
@@ -133,19 +135,45 @@ class Minesweeper:
             main = Minesweeper()
             gtk.main()
 
+
     def options_event(self, widget):
-        options = Options()
+        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Options")
+        md.run()
 
     def statistics_event(self, widget):
-        stats = Statistics()
+        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Statistics")
+        md.run()
 
     def about_event(self, widget):
-        about = About()
+        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "About")
+        md.run()
+
+    def highscore_event(self, widget):
+        app_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        app_window.set_size_request(500, 100)
+        app_window.set_title("Hall of Fame")
+
+
+        hbox_b = gtk.VBox(False, 0)
+        app_window.add(hbox_b)
+        with open("highscore.txt", "r") as ins:
+            halloffame = []
+            for line in ins:
+
+
+                label_b = gtk.Label(line)
+                label_b.show()
+                hbox_b.pack_start(label_b, False, False, 0)
+
+        hbox_b.show()
+        app_window.show()
+
 
     def button_event(self, widget, event, i, j):
+
         if event.button is 1:
             if mineField[i][j] is 9:
-                
+
                 label = gtk.Label(str('X'))
                 label.set_size_request(20, 20)
                 frame = widget.parent
@@ -153,9 +181,19 @@ class Minesweeper:
                 frame.add(label)
                 frame.set_shadow_type(gtk.SHADOW_OUT)
                 label.show()
-                
+
+                #
+                # md.run()
+
+
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO, "Explosion")
                 md.format_secondary_text("You lose !!. Restart?")
+
+                explodeimg = gtk.Image ()
+                explodeimg.set_from_file ("mine-explode.png") #load mine explode icon in
+                md.set_image(explodeimg)
+                md.show_all()
+
                 response=md.run()
                 if response==gtk.RESPONSE_YES:
                     gtk.main_quit()
@@ -169,6 +207,9 @@ class Minesweeper:
                     self.window.destroy()
                     gtk.main_quit()
                 #md.run()
+
+
+
 
             elif mineField[i][j] is 0:
                 map = copy.deepcopy(mineField)
@@ -188,6 +229,58 @@ class Minesweeper:
             else:
                 widget.set_label("F")
 
+    def combo_select_callback(self, widget):
+
+        global g_combo_selected
+        model = widget.get_model()
+        index = widget.get_active()
+        if index:
+            print 'Option selected: ',  model[index][0]
+            g_combo_selected = model[index][0]
+        return
+
+
+    def responseToDialog(entry, dialog, response):
+        dialog.response(response)
+
+    def getUserName(self):
+        global g_combo_selected
+        dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_QUESTION,gtk.BUTTONS_OK,None)
+        combo_box = gtk.combo_box_new_text()
+        combo_box.append_text("Easy")
+        combo_box.append_text("Medium")
+        combo_box.append_text("Hard")
+        combo_box.append_text("Really Hard")
+        combo_box.connect('changed', self.combo_select_callback)
+        combo_box.set_active(0)  # set the default option to be shown
+        combo_box.show()
+        dialog.add_action_widget(combo_box,0)
+        dialog.set_markup('Please enter your <b>username</b>:')
+        #create the text input field
+        entry = gtk.Entry()
+        #allow the user to press enter to do ok
+        entry.connect("activate", self.responseToDialog, gtk.RESPONSE_OK)
+        #create a horizontal box to pack the entry and a label
+        hbox = gtk.HBox()
+        hbox.pack_start(gtk.Label("Name:"), False, 5, 5)
+        hbox.pack_end(entry)
+
+        #some secondary text
+        dialog.format_secondary_markup("This will be used for <i>highscore</i> purposes")
+        #add it and show it
+        dialog.vbox.pack_end(hbox, True, True, 0)
+        dialog.show_all()
+        #go go go
+        dialog.run()
+        text = entry.get_text()
+        dialog.destroy()
+        print text
+        #base this on a message dialog
+
+
+
+
+
     def __init__(self):
         global frameField
         self.builder = gtk.Builder()
@@ -195,6 +288,7 @@ class Minesweeper:
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("Minesweeper")
         vbox = self.builder.get_object("vBox")
+        self.getUserName()
         frameField = [[None] * len(mineField) for i in xrange(len(mineField[0]))]
         for i in range(len(mineField)):
             hbox = gtk.HBox()
