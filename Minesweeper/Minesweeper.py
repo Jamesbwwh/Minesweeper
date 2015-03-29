@@ -5,9 +5,12 @@ import Minefield
 
 mineField = []
 frameField = []
+score = 0
+text = ''
 
 def generate(difficulty):
     global mineField
+
     mineField = Minefield.printMineField(difficulty)
     height = len(mineField)
     width = len(mineField[0])
@@ -48,6 +51,9 @@ def generate(difficulty):
                 break
 
 def exploreMineless(world,i,j):
+
+    global score
+
     N = len(world)
     M = len(world[0])
     if i < 0 or j < 0 or i >= N or j >= M:
@@ -66,6 +72,8 @@ def exploreMineless(world,i,j):
     widget = frame.get_child()
     if type(widget) is type(gtk.Button()):
         frame.remove(widget)
+
+        score += 1
 
         if str(mineField[i][j]) is '0':
             label = gtk.Label(str( ))
@@ -166,7 +174,7 @@ class Minesweeper:
 
 
     def button_event(self, widget, event, i, j):
-
+        global score
         if event.button is 1:
             if mineField[i][j] is 9:
 
@@ -186,8 +194,16 @@ class Minesweeper:
                 md.set_image(explodeimg)
                 md.show_all()
 
+                f = open('highscore.txt','a')
+                f.write(text)
+                f.write("\t")
+                f.write(str(score))
+                f.write("\n")
+                f.close()
+
                 response=md.run()
                 if response==gtk.RESPONSE_YES:
+                    score = 0
                     gtk.main_quit()
                     md.destroy()
                     self.window.destroy()
@@ -233,6 +249,9 @@ class Minesweeper:
         dialog.response(response)
 
     def getUserName(self):
+
+        global text
+
         global g_combo_selected
         dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_QUESTION,gtk.BUTTONS_OK,None)
         combo_box = gtk.combo_box_new_text()
@@ -264,6 +283,7 @@ class Minesweeper:
         text = entry.get_text()
         dialog.destroy()
         print text
+
         #base this on a message dialog
 
     def __init__(self):
