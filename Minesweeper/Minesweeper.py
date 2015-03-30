@@ -7,11 +7,14 @@ mineField = []
 frameField = []
 score = 0
 text = ''
-gIndex = 0;
+gIndex = 0
+mines = 0
+count = 0
 
 def generate(difficulty):
 
     global mineField
+    global mines
 
     mineField = Minefield.printMineField(difficulty)
 
@@ -20,7 +23,9 @@ def generate(difficulty):
     ranges = width * height
     mines = random.randint(ranges // 8, ranges // 7)
 
+    mines = 4;
     print "Difficulty: ", difficulty, "Mines: ", mines, "Height: ", height, "Width: ", width
+    print "Mines Left: ", mines
 
     ranges -= 1
     for mine in range(mines):
@@ -169,6 +174,9 @@ class Minesweeper:
 
     def button_event(self, widget, event, i, j):
         global score
+        global mines
+        global count
+
         if event.button is 1:
             if mineField[i][j] is 9:
 
@@ -189,7 +197,6 @@ class Minesweeper:
                             frame = frameField[i][j]
                             widget = frame.get_child()
                             if type(widget) is type(gtk.Button()):
-
                                 frame.remove(widget)
                                 frame.add(label)
                                 frame.set_shadow_type(gtk.SHADOW_OUT)
@@ -247,6 +254,33 @@ class Minesweeper:
             elif mineField[i][j] is 0:
                 map = copy.deepcopy(mineField)
                 exploreMineless(map, i, j)
+
+                count = 0
+                for i in range(len(mineField)):
+                    for j in range(len(mineField)):
+
+                        frame = frameField[i][j]
+                        widget = frame.get_child()
+
+                        if(widget.get_label() == "F" and mineField[i][j] is 9):
+                            count -= 1
+                        if type(widget) is type(gtk.Button()):
+                            count += 1
+                # print "Counter Count: ", count
+
+                if (count == mines):
+                    dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_INFO,gtk.BUTTONS_OK,None)
+                    dialog.format_secondary_markup("You Win !!!")
+                    dialog.show_all()
+                    dialog.run()
+                    dialog.destroy()
+
+                    f = open('highscore.txt','a')
+                    f.write("%-10s" %text)
+                    f.write("%-30s" %str(score))
+                    f.write("\n")
+                    f.close()
+
                 pass
             else:
                 label = gtk.Label(str(mineField[i][j]))
@@ -256,11 +290,42 @@ class Minesweeper:
                 frame.add(label)
                 frame.set_shadow_type(gtk.SHADOW_OUT)
                 label.show()
+
+                count = 0
+                for i in range(len(mineField)):
+                    for j in range(len(mineField)):
+
+                        frame = frameField[i][j]
+                        widget = frame.get_child()
+
+                        if(widget.get_label() == "F" and mineField[i][j] is 9):
+                            count -= 1
+                        if type(widget) is type(gtk.Button()):
+                            count += 1
+                # print "Counter Count: ", count
+
+                if (count == mines):
+                    dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_INFO,gtk.BUTTONS_OK,None)
+                    dialog.format_secondary_markup("You Win !!!")
+                    dialog.show_all()
+                    dialog.run()
+                    dialog.destroy()
+
+                    f = open('highscore.txt','a')
+                    f.write("%-10s" %text)
+                    f.write("%-30s" %str(score))
+                    f.write("\n")
+                    f.close()
+
         elif event.button is 3:
             if widget.get_label() == "F":
                 widget.set_label("")
+                mines += 1
+                print "Mines Left: ", mines
             else:
                 widget.set_label("F")
+                mines -= 1
+                print "Mines Left: ", mines
 
     def combo_select_callback(self, widget):
 
@@ -343,7 +408,7 @@ class Minesweeper:
                 frameField[i][j] = frame
                 hbox.pack_start(frame, False, False, 0)
         self.window.show_all()
-        # print "Start6.3"
+
 
 main = Minesweeper()
 gtk.main()
