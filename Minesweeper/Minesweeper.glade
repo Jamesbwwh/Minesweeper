@@ -104,12 +104,12 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="HighScore">
-                        <property name="label">gtk-sort-ascending</property>
+                        <property name="label">High Score</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="image">image1</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="highscore_event" swapped="no"/>
                       </object>
                     </child>
