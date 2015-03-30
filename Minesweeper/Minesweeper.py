@@ -195,6 +195,29 @@ class Minesweeper:
                                 frame.set_shadow_type(gtk.SHADOW_OUT)
                                 label.show()
 
+                        elif mineField[i][j] is 0:
+                            label = gtk.Label(str(' '))
+                            label.set_size_request(20, 20)
+
+                            frame = frameField[i][j]
+                            widget = frame.get_child()
+                            if type(widget) is type(gtk.Button()):
+                                frame.remove(widget)
+                                frame.add(label)
+                                frame.set_shadow_type(gtk.SHADOW_OUT)
+                                label.show()
+                        else:
+                            label = gtk.Label(str(mineField[i][j]))
+                            label.set_size_request(20, 20)
+
+                            frame = frameField[i][j]
+                            widget = frame.get_child()
+                            if type(widget) is type(gtk.Button()):
+                                frame.remove(widget)
+                                frame.add(label)
+                                frame.set_shadow_type(gtk.SHADOW_OUT)
+                                label.show()
+
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO, "Explosion")
                 md.format_secondary_text("You lose !!. Restart?")
 
@@ -215,14 +238,11 @@ class Minesweeper:
                     gtk.main_quit()
                     md.destroy()
                     self.window.destroy()
-                    generate(1)
                     main = Minesweeper()
                     gtk.main()
+
                 else:
                     md.destroy()
-                    self.window.destroy()
-                    gtk.main_quit()
-                #md.run()
 
             elif mineField[i][j] is 0:
                 map = copy.deepcopy(mineField)
