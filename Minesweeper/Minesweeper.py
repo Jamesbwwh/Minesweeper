@@ -7,15 +7,21 @@ mineField = []
 frameField = []
 score = 0
 text = ''
+gIndex = 0;
 
 def generate(difficulty):
+
     global mineField
 
     mineField = Minefield.printMineField(difficulty)
+
     height = len(mineField)
     width = len(mineField[0])
     ranges = width * height
     mines = random.randint(ranges // 8, ranges // 7)
+
+    print "Difficulty: ", difficulty, "Mines: ", mines, "Height: ", height, "Width: ", width
+
     ranges -= 1
     for mine in range(mines):
         while(True):
@@ -125,13 +131,13 @@ class Statistics:
         self.window.show_all()
 
 class Minesweeper:
+
     def quit_event(self, widget):
         self.window.destroy()
         gtk.main_quit()
 
     def new_game_event(self, widget):
-        # md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "New Game")
-        # md.run()
+
         md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "New Game")
         md.format_secondary_text("Create a new Game.")
         response=md.run()
@@ -139,8 +145,10 @@ class Minesweeper:
             md.destroy()
             self.window.destroy()
             gtk.main_quit()
+
             generate(1)
             main = Minesweeper()
+
             gtk.main()
 
     def options_event(self, widget):
@@ -148,11 +156,11 @@ class Minesweeper:
         md.run()
 
     def statistics_event(self, widget):
-        about = About()
+        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Statistics")
+        md.run()
 
     def about_event(self, widget):
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "About")
-        md.run()
+        about = About()
 
     def highscore_event(self, widget):
         app_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -236,12 +244,14 @@ class Minesweeper:
     def combo_select_callback(self, widget):
 
         global g_combo_selected
+        global gIndex
+
         model = widget.get_model()
-        index = widget.get_active()
-        if index:
-            print 'Option selected: ',  model[index][0]
-            g_combo_selected = model[index][0]
+        gIndex = widget.get_active()
+        if gIndex:
+            g_combo_selected = model[gIndex][0]
         return
+
 
 
     def responseToDialog(entry, dialog, response):
@@ -279,20 +289,28 @@ class Minesweeper:
         dialog.show_all()
         #go go go
         dialog.run()
+
         text = entry.get_text()
         dialog.destroy()
-        print text
+        # print text
 
         #base this on a message dialog
 
     def __init__(self):
+
+        self.getUserName()
+
         global frameField
+
         self.builder = gtk.Builder()
         self.builder.add_from_file("minesweeper.glade")
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("Minesweeper")
         vbox = self.builder.get_object("vBox")
-        self.getUserName()
+
+
+        generate(gIndex+1)
+
         frameField = [[None] * len(mineField) for i in xrange(len(mineField[0]))]
         for i in range(len(mineField)):
             hbox = gtk.HBox()
@@ -307,8 +325,8 @@ class Minesweeper:
                 frameField[i][j] = frame
                 hbox.pack_start(frame, False, False, 0)
         self.window.show_all()
+        # print "Start6.3"
 
-generate(1)
 main = Minesweeper()
 gtk.main()
 #for i in range(len(mineField)):
