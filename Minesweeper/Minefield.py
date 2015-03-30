@@ -11,7 +11,12 @@ def printMineField(difficulty):
 
     #hard difficulty
     if (difficulty == 3):
-        minefield = [[0] * 30 for i in xrange(16)]
+        minefield = [[0] * 20 for i in xrange(20)]
+        return minefield
+
+    #Very hard difficulty
+    if (difficulty == 4):
+        minefield = [[0] * 25 for i in xrange(25)]
         return minefield
 
     #custom difficulty
