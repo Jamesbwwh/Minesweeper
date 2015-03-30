@@ -148,8 +148,7 @@ class Minesweeper:
         md.run()
 
     def statistics_event(self, widget):
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Statistics")
-        md.run()
+        about = About()
 
     def about_event(self, widget):
         md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "About")
