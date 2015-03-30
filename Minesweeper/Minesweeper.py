@@ -193,6 +193,21 @@ class Minesweeper:
                 frame.set_shadow_type(gtk.SHADOW_OUT)
                 label.show()
 
+                for i in range(len(mineField)):
+                    for j in range(len(mineField)):
+                        if mineField[i][j] is 9:
+                            label = gtk.Label(str('Z'))
+                            label.set_size_request(20, 20)
+
+                            frame = frameField[i][j]
+                            widget = frame.get_child()
+                            if type(widget) is type(gtk.Button()):
+
+                                frame.remove(widget)
+                                frame.add(label)
+                                frame.set_shadow_type(gtk.SHADOW_OUT)
+                                label.show()
+
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO, "Explosion")
                 md.format_secondary_text("You lose !!. Restart?")
 
