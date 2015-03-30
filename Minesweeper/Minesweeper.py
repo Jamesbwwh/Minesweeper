@@ -78,14 +78,11 @@ def exploreMineless(world,i,j):
     widget = frame.get_child()
     if type(widget) is type(gtk.Button()):
         frame.remove(widget)
-
         score += 1
-
         if str(mineField[i][j]) is '0':
             label = gtk.Label(str( ))
         else:
             label = gtk.Label(str(mineField[i][j]))
-
         label.set_size_request(20, 20)
         frame.add(label)
         frame.set_shadow_type(gtk.SHADOW_OUT)
@@ -137,19 +134,10 @@ class Minesweeper:
         gtk.main_quit()
 
     def new_game_event(self, widget):
-
-        md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "New Game")
-        md.format_secondary_text("Create a new Game.")
-        response=md.run()
-        if response==gtk.RESPONSE_OK:
-            md.destroy()
-            self.window.destroy()
-            gtk.main_quit()
-
-            generate(1)
-            main = Minesweeper()
-
-            gtk.main()
+        self.window.destroy()
+        gtk.main_quit()
+        main = Minesweeper()
+        gtk.main()
 
     def options_event(self, widget):
         md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, "Options")
@@ -178,7 +166,6 @@ class Minesweeper:
 
         hbox_b.show()
         app_window.show()
-
 
     def button_event(self, widget, event, i, j):
         global score
@@ -217,9 +204,8 @@ class Minesweeper:
                 md.show_all()
 
                 f = open('highscore.txt','a')
-                f.write(text)
-                f.write("\t")
-                f.write(str(score))
+                f.write("%-10s" %text)
+                f.write("%-30s" %str(score))
                 f.write("\n")
                 f.close()
 
@@ -266,8 +252,6 @@ class Minesweeper:
         if gIndex:
             g_combo_selected = model[gIndex][0]
         return
-
-
 
     def responseToDialog(entry, dialog, response):
         dialog.response(response)
@@ -322,7 +306,6 @@ class Minesweeper:
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("Minesweeper")
         vbox = self.builder.get_object("vBox")
-
 
         generate(gIndex+1)
 

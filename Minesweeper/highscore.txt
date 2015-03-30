@@ -1,3 +1,7 @@
-user1 	12
-user2 	2
-user3	7
+YY        624                           
+YY2       254                           
+Necro     399                           
+nec       0                             
+          80                            
+nec       159                           
+nec       79                            
