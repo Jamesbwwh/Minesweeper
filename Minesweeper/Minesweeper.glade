@@ -2,6 +2,11 @@
 <interface>
   <requires lib="gtk+" version="2.24"/>
   <!-- interface-naming-policy project-wide -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-dialog-info</property>
+  </object>
   <object class="GtkWindow" id="Minesweeper">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Minesweeper</property>
@@ -154,7 +159,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="lblMines">
-                <property name="visible">True</property>
+              glad  <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Mines</property>
               </object>
