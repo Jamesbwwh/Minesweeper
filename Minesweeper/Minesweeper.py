@@ -23,7 +23,8 @@ def generate(difficulty):
     ranges = width * height
     mines = random.randint(ranges // 8, ranges // 7)
 
-    mines = 4;
+    # mines = 4; # comment or remove this line. for testing only.
+    
     print "Difficulty: ", difficulty, "Mines: ", mines, "Height: ", height, "Width: ", width
     print "Mines Left: ", mines
 
