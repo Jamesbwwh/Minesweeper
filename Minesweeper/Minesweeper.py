@@ -173,14 +173,14 @@ class Minesweeper:
         app_window.show()
 
     def button_event(self, widget, event, i, j):
-        global score
-        global mines
-        global count
+        global score                                            # Global Score - Game score
+        global mines                                            # Global mines - No. of Mines
+        global count                                            # Global Count - Counter for number of moves left
 
         if event.button is 1:
-            if mineField[i][j] is 9:
+            if mineField[i][j] is 9:                            # If it is a Mine
 
-                label = gtk.Label(str('X'))
+                label = gtk.Label(str('X'))                     # Label it as "X"
                 label.set_size_request(20, 20)
                 frame = widget.parent
                 frame.remove(widget)
@@ -188,9 +188,9 @@ class Minesweeper:
                 frame.set_shadow_type(gtk.SHADOW_OUT)
                 label.show()
 
-                for i in range(len(mineField)):
-                    for j in range(len(mineField)):
-                        if mineField[i][j] is 9:
+                for i in range(len(mineField)):                 # Since lost already due to clicking on mine
+                    for j in range(len(mineField)):             # Reveal the entire grid to player
+                        if mineField[i][j] is 9:                # if it is a Mine
                             label = gtk.Label(str('Z'))
                             label.set_size_request(20, 20)
 
@@ -202,7 +202,7 @@ class Minesweeper:
                                 frame.set_shadow_type(gtk.SHADOW_OUT)
                                 label.show()
 
-                        elif mineField[i][j] is 0:
+                        elif mineField[i][j] is 0:              # if empty box
                             label = gtk.Label(str(' '))
                             label.set_size_request(20, 20)
 
@@ -213,7 +213,7 @@ class Minesweeper:
                                 frame.add(label)
                                 frame.set_shadow_type(gtk.SHADOW_OUT)
                                 label.show()
-                        else:
+                        else:                                   # those number tiles
                             label = gtk.Label(str(mineField[i][j]))
                             label.set_size_request(20, 20)
 
@@ -233,14 +233,14 @@ class Minesweeper:
                 md.set_image(explodeimg)
                 md.show_all()
 
-                f = open('highscore.txt','a')
+                f = open('highscore.txt','a')                   # Update Score to txt
                 f.write("%-10s" %text)
                 f.write("%-30s" %str(score))
                 f.write("\n")
                 f.close()
 
                 response=md.run()
-                if response==gtk.RESPONSE_YES:
+                if response==gtk.RESPONSE_YES:                  # if player want to replay
                     score = 0
                     gtk.main_quit()
                     md.destroy()
@@ -248,25 +248,25 @@ class Minesweeper:
                     main = Minesweeper()
                     gtk.main()
 
-                else:
+                else:                                           # if player do not want to replay
                     md.destroy()
 
-            elif mineField[i][j] is 0:
+            elif mineField[i][j] is 0:                          # if player click on empty tiles
                 map = copy.deepcopy(mineField)
                 exploreMineless(map, i, j)
 
                 count = 0
-                for i in range(len(mineField)):
+                for i in range(len(mineField)):                 # Check for winning based on no. of un-open tiles
                     for j in range(len(mineField)):
 
                         frame = frameField[i][j]
                         widget = frame.get_child()
 
-                        if(widget.get_label() == "F" and mineField[i][j] is 9):
-                            count -= 1
-                        if type(widget) is type(gtk.Button()):
+                        if(widget.get_label() == "F" and mineField[i][j] is 9): # if tile is flag by player as a flag
+                            count -= 1                                          # and it is really a mine
+
+                        if type(widget) is type(gtk.Button()):  # Number of un-open tiles left
                             count += 1
-                # print "Counter Count: ", count
 
                 if (count == mines):
                     dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_INFO,gtk.BUTTONS_OK,None)
@@ -275,15 +275,15 @@ class Minesweeper:
                     dialog.run()
                     dialog.destroy()
 
-                    f = open('highscore.txt','a')
+                    f = open('highscore.txt','a')               # Update Score to txt
                     f.write("%-10s" %text)
                     f.write("%-30s" %str(score))
                     f.write("\n")
                     f.close()
-
                 pass
+
             else:
-                label = gtk.Label(str(mineField[i][j]))
+                label = gtk.Label(str(mineField[i][j]))         # if player click on number tiles.
                 label.set_size_request(20, 20)
                 frame = widget.parent
                 frame.remove(widget)
@@ -292,17 +292,17 @@ class Minesweeper:
                 label.show()
 
                 count = 0
-                for i in range(len(mineField)):
+                for i in range(len(mineField)):                 # Check for winning based on no. of un-open tiles
                     for j in range(len(mineField)):
 
                         frame = frameField[i][j]
                         widget = frame.get_child()
 
-                        if(widget.get_label() == "F" and mineField[i][j] is 9):
-                            count -= 1
-                        if type(widget) is type(gtk.Button()):
+                        if(widget.get_label() == "F" and mineField[i][j] is 9): # if tile is flag by player as a flag
+                            count -= 1                                          # and it is really a mine
+
+                        if type(widget) is type(gtk.Button()):  # Number of un-open tiles left
                             count += 1
-                # print "Counter Count: ", count
 
                 if (count == mines):
                     dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_INFO,gtk.BUTTONS_OK,None)
@@ -311,20 +311,20 @@ class Minesweeper:
                     dialog.run()
                     dialog.destroy()
 
-                    f = open('highscore.txt','a')
+                    f = open('highscore.txt','a')               # Update Score to txt
                     f.write("%-10s" %text)
                     f.write("%-30s" %str(score))
                     f.write("\n")
                     f.close()
 
-        elif event.button is 3:
+        elif event.button is 3:                                 # Update of tiles to flag or un-flag it
             if widget.get_label() == "F":
                 widget.set_label("")
-                mines += 1
+                mines += 1                                      # Update mine counter accordingly
                 print "Mines Left: ", mines
             else:
                 widget.set_label("F")
-                mines -= 1
+                mines -= 1                                      # Update mine counter accordingly
                 print "Mines Left: ", mines
 
     def combo_select_callback(self, widget):
@@ -353,32 +353,21 @@ class Minesweeper:
         combo_box.append_text("Hard")
         combo_box.append_text("Really Hard")
         combo_box.connect('changed', self.combo_select_callback)
-        combo_box.set_active(0)  # set the default option to be shown
+        combo_box.set_active(0)                                  # set the default option to be shown
         combo_box.show()
         dialog.add_action_widget(combo_box,0)
         dialog.set_markup('Please enter your <b>username</b>:')
-        #create the text input field
-        entry = gtk.Entry()
-        #allow the user to press enter to do ok
-        entry.connect("activate", self.responseToDialog, gtk.RESPONSE_OK)
-        #create a horizontal box to pack the entry and a label
-        hbox = gtk.HBox()
+        entry = gtk.Entry()                                      # Create the text input field
+        entry.connect("activate", self.responseToDialog, gtk.RESPONSE_OK)# Allow the user to press enter to do ok
+        hbox = gtk.HBox()                                        # Create a horizontal box to pack the entry and a label
         hbox.pack_start(gtk.Label("Name:"), False, 5, 5)
         hbox.pack_end(entry)
-
-        #some secondary text
         dialog.format_secondary_markup("This will be used for <i>highscore</i> purposes")
-        #add it and show it
-        dialog.vbox.pack_end(hbox, True, True, 0)
+        dialog.vbox.pack_end(hbox, True, True, 0)                # Add it and show it
         dialog.show_all()
-        #go go go
         dialog.run()
-
         text = entry.get_text()
         dialog.destroy()
-        # print text
-
-        #base this on a message dialog
 
     def __init__(self):
 
