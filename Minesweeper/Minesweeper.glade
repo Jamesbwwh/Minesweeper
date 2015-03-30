@@ -144,7 +144,7 @@
               <object class="GtkLabel" id="lblTime">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes">Time</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -156,7 +156,7 @@
               <object class="GtkLabel" id="lblMines">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes">Mines</property>
               </object>
               <packing>
                 <property name="expand">True</property>
