@@ -227,6 +227,7 @@ class Minesweeper:
                                 label.show()
 
                 md = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO, "Explosion")
+                md.set_title("Lose")
                 md.format_secondary_text("You lose !!. Restart?")
 
                 explodeimg = gtk.Image ()
@@ -271,6 +272,7 @@ class Minesweeper:
 
                 if (count == mines):
                     dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_INFO,gtk.BUTTONS_OK,None)
+                    dialog.set_title("Win")
                     dialog.format_secondary_markup("You Win !!!")
                     dialog.show_all()
                     dialog.run()
@@ -307,6 +309,7 @@ class Minesweeper:
 
                 if (count == mines):
                     dialog = gtk.MessageDialog(None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,gtk.MESSAGE_INFO,gtk.BUTTONS_OK,None)
+                    dialog.set_title("Win")
                     dialog.format_secondary_markup("You Win !!!")
                     dialog.show_all()
                     dialog.run()
@@ -357,6 +360,7 @@ class Minesweeper:
         combo_box.set_active(0)                                  # set the default option to be shown
         combo_box.show()
         dialog.add_action_widget(combo_box,0)
+        dialog.set_title("Player Name")
         dialog.set_markup('Please enter your <b>username</b>:')
         entry = gtk.Entry()                                      # Create the text input field
         entry.connect("activate", self.responseToDialog, gtk.RESPONSE_OK)# Allow the user to press enter to do ok
