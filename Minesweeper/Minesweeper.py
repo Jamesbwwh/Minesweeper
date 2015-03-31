@@ -31,7 +31,6 @@ def generate(difficulty):
     # mines = 4; # comment or remove this line. for testing only.
     
     print "Difficulty: ", difficulty, "Mines: ", mines, "Height: ", height, "Width: ", width
-    print "Mines Left: ", mines
 
     ranges -= 1
     for mine in range(mines):
@@ -341,11 +340,9 @@ class Minesweeper:
             if widget.get_label() == "F":
                 widget.set_label("")
                 mines += 1                                      # Update mine counter accordingly
-                print "Mines Left: ", mines
             else:
                 widget.set_label("F")
                 mines -= 1                                      # Update mine counter accordingly
-                print "Mines Left: ", mines
 
     def combo_select_callback(self, widget):
 
@@ -398,7 +395,6 @@ class Minesweeper:
             
     def __init__(self):
 
-        print 'Test'
         self.getUserName()
 
         global frameField
