@@ -132,7 +132,18 @@ class Statistics:
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("Statistics")
         self.window.show_all()
+class PerodicTimer:
+    def __init__(self, timeout, builder):
+        self.counter = 0
+        gobject.timeout_add_seconds(timeout, self.callback)
+        self.buildtest = builder
 
+    def callback(self):
+        #self.label.set_text('Counter: ' + str(self.counter))
+        self.labela = self.buildtest.get_object("lblTime")
+        self.labela.set_text('Time:'+str(self.counter))
+        self.counter += 1
+        return True
 class Minesweeper:
 
     def quit_event(self, widget):
@@ -374,8 +385,15 @@ class Minesweeper:
         text = entry.get_text()
         dialog.destroy()
 
+    def mineThread(self):
+        global mines
+        while(True):
+            self.minelabel = self.builder.get_object("lblMines")
+            self.minelabel.set_text('Mines:'+str(mines))
+            
     def __init__(self):
 
+        print 'Test'
         self.getUserName()
 
         global frameField
@@ -385,6 +403,13 @@ class Minesweeper:
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("Minesweeper")
         vbox = self.builder.get_object("vBox")
+
+        periodic_timer = PerodicTimer(1,self.builder)
+
+        try:
+            thread.start_new_thread(self.mineThread,())
+        except:
+            print "Error start mine thread"
 
         generate(gIndex+1)
 
