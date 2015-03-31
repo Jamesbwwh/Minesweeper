@@ -89,19 +89,7 @@ def exploreMineless(world,i,j):
             label = gtk.Label(str( ))
         else:
             label = gtk.Label(str(mineField[i][j]))
-
         label.set_size_request(20, 20)
-
-        # label.set_markup('<span color="red">Z</span>')
-        # if ( str(mineField[i][j]) == '1'):
-        #     label.set_markup('<span color="blue">1</span>')
-        # elif ( str(mineField[i][j]) == '2'):
-        #     label.set_markup('<span color="green">2</span>')
-        # elif ( str(mineField[i][j]) == '0'):
-        #     label.set_markup('<span color="black"> </span>')
-        # else:
-        #     label.set_markup('<span color="red">',str(mineField[i][j]),'</span>')
-
         frame.add(label)
         frame.set_shadow_type(gtk.SHADOW_OUT)
         label.show()
@@ -194,7 +182,6 @@ class Minesweeper:
             if mineField[i][j] is 9:                            # If it is a Mine
 
                 label = gtk.Label(str('X'))                     # Label it as "X"
-                label.set_markup('<span color="blue">X</span>')
                 label.set_size_request(20, 20)
                 frame = widget.parent
                 frame.remove(widget)
@@ -207,7 +194,7 @@ class Minesweeper:
                         if mineField[i][j] is 9:                # if it is a Mine
                             label = gtk.Label(str('Z'))
                             label.set_size_request(20, 20)
-                            label.set_markup('<span color="red">Z</span>')
+
                             frame = frameField[i][j]
                             widget = frame.get_child()
                             if type(widget) is type(gtk.Button()):
