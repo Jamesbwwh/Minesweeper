@@ -2,6 +2,11 @@ import gtk
 import copy
 import random
 import Minefield
+import thread
+import time
+import threading
+
+import gobject
 
 mineField = []
 frameField = []
