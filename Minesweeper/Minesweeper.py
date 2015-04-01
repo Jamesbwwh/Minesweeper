@@ -14,6 +14,7 @@ flags = 0
 name = ''
 gIndex = 0
 periodic_timer = None
+colors = ["red","blue","green","green","green","green","green","green","green","red"]
 
 def exploreMineless(world,i,j):
     N = len(world)
@@ -38,6 +39,7 @@ def exploreMineless(world,i,j):
             label = gtk.Label()
         else:
             label = gtk.Label(str(mineField[i][j]))
+            label.set_markup('<span color="%s">%s</span>'%((colors[(mineField[i][j])],str(mineField[i][j]))))
         label.set_size_request(20, 20)
         frame.add(label)
         frame.set_shadow_type(gtk.SHADOW_OUT)
@@ -167,6 +169,8 @@ class Minesweeper:
     def button_event(self, widget, event, i, j):
         global mines                                            # Global mines - No. Mines
         global flags                                            # Global flags - No. Mines left
+        global colors
+        # colors = ["red","blue","green","green","green","green","green","green","green","red"]
 
         if event.button is 1:
             if mineField[i][j] is 9:                            # If it is a Mine
@@ -183,10 +187,16 @@ class Minesweeper:
                     for j in range(len(mineField)):             # Reveal the entire grid to player
                         if mineField[i][j] is 9:                # if it is a Mine
                             label = gtk.Label(str('Z'))
+                            label.set_markup('<span color="%s">%s</span>'%((colors[9],'Z')))
                         elif mineField[i][j] is 0:              # if empty box
                             label = gtk.Label(str(' '))
                         else:                                   # those number tiles
                             label = gtk.Label(str(mineField[i][j]))
+                            label.set_markup('<span color="%s">%s</span>'%((colors[(mineField[i][j])],str(mineField[i][j]))))
+
+                        # label.set_markup('<span color="red">Z</span>')
+
+
                         label.set_size_request(20, 20)
                         frame = frameField[i][j]
                         widget = frame.get_child()
@@ -234,6 +244,7 @@ class Minesweeper:
 
             else:
                 label = gtk.Label(str(mineField[i][j]))         # if player click on number tiles.
+                label.set_markup('<span color="%s">%s</span>'%((colors[(mineField[i][j])],str(mineField[i][j]))))
                 label.set_size_request(20, 20)
                 frame = widget.parent
                 frame.remove(widget)
