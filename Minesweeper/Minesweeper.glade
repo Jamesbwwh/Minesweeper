@@ -2,11 +2,6 @@
 <interface>
   <requires lib="gtk+" version="2.24"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-dialog-info</property>
-  </object>
   <object class="GtkWindow" id="Minesweeper">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Minesweeper</property>
@@ -151,7 +146,7 @@
               <object class="GtkImage" id="imgMines">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-no</property>
+                <property name="pixbuf">mine_small.png</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -169,5 +164,10 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-dialog-info</property>
   </object>
 </interface>

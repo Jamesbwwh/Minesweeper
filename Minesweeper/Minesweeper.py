@@ -188,6 +188,12 @@ class Minesweeper:
                     for j in range(len(mineField)):             # Reveal the entire grid to player
                         if mineField[i][j] is 9:                # if it is a Mine
                             label = gtk.Label(str('Z'))
+
+                            # icon = gtk.image_new_from_stock(gtk.STOCK_HOME, gtk.ICON_SIZE_MENU)
+                            # label_with_icon.pack_start(icon)
+                            # label_with_icon.pack_start(gtk.Label('Home'))
+                            # label_with_icon.show_all()
+
                             label.set_markup('<b><span color="%s">%s</span></b>'%((colors[9],'Z')))
                         elif mineField[i][j] is 0:              # if empty box
                             label = gtk.Label(str(' '))
