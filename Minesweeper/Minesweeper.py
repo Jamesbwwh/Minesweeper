@@ -39,7 +39,7 @@ def exploreMineless(world,i,j):
             label = gtk.Label()
         else:
             label = gtk.Label(str(mineField[i][j]))
-            label.set_markup('<b><span color="%s">%s</span></b>'%((colors[(mineField[i][j])],str(mineField[i][j]))))
+            label.set_markup('<b><span color="%s">%s</span></b>' % ((colors[(mineField[i][j])],str(mineField[i][j]))))
         label.set_size_request(20, 20)
         frame.add(label)
         frame.set_shadow_type(gtk.SHADOW_OUT)
@@ -146,36 +146,51 @@ class Minesweeper:
         app_window.set_size_request(500, 100)
         app_window.set_title("Hall of Fame")
 
-        hbox_b = gtk.VBox(False, 0)
-        app_window.add(hbox_b)
+        vbox = gtk.VBox(True, 0)
+        app_window.add(vbox)
         halloffame = []
         with open("highscore.txt", "r") as f:
             for line in f:
-                data = line.split(",")
-                data[1] = int(data[1])
-                data[0], data[1] = data[1], data[0]
+                data = line.strip().split(";")
+                data[0], data[1] = int(data[0]), int(data[1])
                 halloffame.append(data)
         halloffame = quicksort.QuickSort(halloffame)
-        label_b = gtk.Label("%-10s%30s"%("Name","Time"))
-        label_b.show()
-        hbox_b.pack_start(label_b, False, False, 0)
+        hbox = gtk.HBox(True, 0)
+        label_a = gtk.Label("Name")
+        label_b = gtk.Label("Difficulty")
+        label_c = gtk.Label("Time")
+        hbox.pack_start(label_a, True, True, 0)
+        hbox.pack_start(label_b, True, True, 0)
+        hbox.pack_start(label_c, True, True, 0)
+        vbox.pack_start(hbox, False, False, 0)
         for entry in halloffame:
-            label_b = gtk.Label("%-10s%30s"%(entry[1],str(entry[0])))
-            label_b.show()
-            hbox_b.pack_start(label_b, False, False, 0)
-        hbox_b.show()
-        app_window.show()
+            hbox = gtk.HBox(True, 0)
+            label_a = gtk.Label(entry[2])
+            if entry[1] is 0:
+                label_b = gtk.Label("Easy")
+            elif entry[1] is 1:
+                label_b = gtk.Label("Medium")
+            elif entry[1] is 2:
+                label_b = gtk.Label("Hard")
+            elif entry[1] is 3:
+                label_b = gtk.Label("Really Hard")
+            label_c = gtk.Label(str(entry[0]))
+            hbox.pack_start(label_a, True, True, 0)
+            hbox.pack_start(label_b, True, True, 0)
+            hbox.pack_start(label_c, True, True, 0)
+            vbox.pack_start(hbox, False, False, 0)
+        app_window.show_all()
 
     def button_event(self, widget, event, i, j):
-        global mines                                            # Global mines - No. Mines
-        global flags                                            # Global flags - No. Mines left
+        global mines                                            # Global mines - No.  Mines
+        global flags                                            # Global flags - No.  Mines left
         global colors
         global name
 
         if event.button is 1:
             if mineField[i][j] is 9:                            # If it is a Mine
                 label = gtk.Label(str('X'))                     # Label it as "X"
-                label.set_markup('<b><span color="%s">%s</span></b>'%((colors[0],'X')))
+                label.set_markup('<b><span color="%s">%s</span></b>' % ((colors[0],'X')))
                 label.set_size_request(20, 20)
                 frame = widget.parent
                 frame.remove(widget)
@@ -188,12 +203,12 @@ class Minesweeper:
                     for j in range(len(mineField)):             # Reveal the entire grid to player
                         if mineField[i][j] is 9:                # if it is a Mine
                             label = gtk.Label(str('Z'))
-                            label.set_markup('<b><span color="%s">%s</span></b>'%((colors[9],'Z')))
+                            label.set_markup('<b><span color="%s">%s</span></b>' % ((colors[9],'Z')))
                         elif mineField[i][j] is 0:              # if empty box
                             label = gtk.Label(str(' '))
                         else:                                   # those number tiles
                             label = gtk.Label(str(mineField[i][j]))
-                            label.set_markup('<b><span color="%s">%s</span></b>'%((colors[(mineField[i][j])],str(mineField[i][j]))))
+                            label.set_markup('<b><span color="%s">%s</span></b>' % ((colors[(mineField[i][j])],str(mineField[i][j]))))
 
                         label.set_size_request(20, 20)
                         frame = frameField[i][j]
@@ -215,7 +230,7 @@ class Minesweeper:
                 f = open('highscore.txt','a')               # Update Score to txt
                 if not name:
                         name = "anonymous"
-                f.write("%-10s,%-30s\n" % (name,"-1"))
+                f.write("%s;%s;%s\n" % ("-1",gIndex,name))
                 f.close()
 
                 response = md.run()
@@ -241,12 +256,12 @@ class Minesweeper:
                     f = open('highscore.txt','a')               # Update Score to txt
                     if not name:
                         name = "anonymous"
-                    f.write("%-10s,%-30s\n" % (name,str(score)))
+                    f.write("%s;%s;%s\n" % (str(score),gIndex,name))
                     f.close()
 
             else:
                 label = gtk.Label(str(mineField[i][j]))         # if player click on number tiles.
-                label.set_markup('<b><span color="%s">%s</span></b>'%((colors[(mineField[i][j])],str(mineField[i][j]))))
+                label.set_markup('<b><span color="%s">%s</span></b>' % ((colors[(mineField[i][j])],str(mineField[i][j]))))
                 label.set_size_request(20, 20)
                 frame = widget.parent
                 frame.remove(widget)
@@ -266,7 +281,7 @@ class Minesweeper:
                     f = open('highscore.txt','a')               # Update Score to txt
                     if not name:
                         name = "anonymous"
-                    f.write("%-10s,%-30s\n" % (name,str(score)))
+                    f.write("%s;%s;%s\n" % (str(score),gIndex,name))
                     f.close()
 
         elif event.button is 3:                                 # Update of tiles to flag or un-flag it
