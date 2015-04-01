@@ -156,11 +156,11 @@ class Minesweeper:
                 data[0], data[1] = data[1], data[0]
                 halloffame.append(data)
         halloffame = quicksort.QuickSort(halloffame)
-        label_b = gtk.Label("%15s,        Time" % "Name")
+        label_b = gtk.Label("%-10s%30s"%("Name","Time"))
         label_b.show()
         hbox_b.pack_start(label_b, False, False, 0)
         for entry in halloffame:
-            label_b = gtk.Label(entry[1] + ",        " + str(entry[0]))
+            label_b = gtk.Label("%-10s%30s"%(entry[1],str(entry[0])))
             label_b.show()
             hbox_b.pack_start(label_b, False, False, 0)
         hbox_b.show()
@@ -195,10 +195,6 @@ class Minesweeper:
                             label = gtk.Label(str(mineField[i][j]))
                             label.set_markup('<b><span color="%s">%s</span></b>'%((colors[(mineField[i][j])],str(mineField[i][j]))))
 
-
-                        # label.set_markup('<span color="red">Z</span>')
-
-
                         label.set_size_request(20, 20)
                         frame = frameField[i][j]
                         widget = frame.get_child()
@@ -219,7 +215,7 @@ class Minesweeper:
                 f = open('highscore.txt','a')               # Update Score to txt
                 if not name:
                         name = "anonymous"
-                f.write("%s,%s\n" % (name,"-1"))
+                f.write("%-10s,%-30s\n" % (name,"-1"))
                 f.close()
 
                 response = md.run()
@@ -245,7 +241,7 @@ class Minesweeper:
                     f = open('highscore.txt','a')               # Update Score to txt
                     if not name:
                         name = "anonymous"
-                    f.write("%s,%s\n" % (name,str(score)))
+                    f.write("%-10s,%-30s\n" % (name,str(score)))
                     f.close()
 
             else:
@@ -270,13 +266,14 @@ class Minesweeper:
                     f = open('highscore.txt','a')               # Update Score to txt
                     if not name:
                         name = "anonymous"
-                    f.write("%s,%s\n" % (name,str(score)))
+                    f.write("%-10s,%-30s\n" % (name,str(score)))
                     f.close()
 
         elif event.button is 3:                                 # Update of tiles to flag or un-flag it
             if widget.get_label() is "F":
                 widget.set_label("")
                 flags += 1                                      # Update mine counter accordingly
+
             else:
                 widget.set_label("F")
                 flags -= 1                                      # Update mine counter accordingly
@@ -326,7 +323,7 @@ class Minesweeper:
 
     def mineThread(self):
         while(True):
-            self.minelabel.set_text('Mines:' + str(mines))
+            self.minelabel.set_text('Mines:' + str(flags))
             
     def __init__(self):
         global mineField
