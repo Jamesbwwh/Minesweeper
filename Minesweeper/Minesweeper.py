@@ -1,4 +1,5 @@
 import Minefield
+import quicksort
 import gtk
 import copy
 import thread
@@ -145,19 +146,27 @@ class Minesweeper:
 
         hbox_b = gtk.VBox(False, 0)
         app_window.add(hbox_b)
-        with open("highscore.txt", "r") as ins:
-            halloffame = []
-            for line in ins:
-                label_b = gtk.Label(line)
-                label_b.show()
-                hbox_b.pack_start(label_b, False, False, 0)
-
+        halloffame = []
+        with open("highscore.txt", "r") as f:
+            for line in f:
+                data = line.split(",")
+                data[1] = int(data[1])
+                data[0], data[1] = data[1], data[0]
+                halloffame.append(data)
+        halloffame = quicksort.QuickSort(halloffame)
+        label_b = gtk.Label("%15s,        Time" % "Name")
+        label_b.show()
+        hbox_b.pack_start(label_b, False, False, 0)
+        for entry in halloffame:
+            label_b = gtk.Label(entry[1] + ",        " + str(entry[0]))
+            label_b.show()
+            hbox_b.pack_start(label_b, False, False, 0)
         hbox_b.show()
         app_window.show()
 
     def button_event(self, widget, event, i, j):
         global mines                                            # Global mines - No. Mines
-        global flags                                            # Global flags - Counter num moves left
+        global flags                                            # Global flags - No. Mines left
 
         if event.button is 1:
             if mineField[i][j] is 9:                            # If it is a Mine
@@ -196,7 +205,7 @@ class Minesweeper:
                 md.show_all()
 
                 f = open('highscore.txt','a')               # Update Score to txt
-                f.write("%-10s%-30s\n" % (name,"lost"))
+                f.write("%s,%s\n" % (name,"-1"))
                 f.close()
 
                 response = md.run()
@@ -220,7 +229,7 @@ class Minesweeper:
                     score = periodic_timer.stop()
                     youWinDialog()
                     f = open('highscore.txt','a')               # Update Score to txt
-                    f.write("%-10s%-30s\n" % (name,str(score)))
+                    f.write("%s,%s\n" % (name,str(score)))
                     f.close()
 
             else:
@@ -242,7 +251,7 @@ class Minesweeper:
                     score = periodic_timer.stop()
                     youWinDialog()
                     f = open('highscore.txt','a')               # Update Score to txt
-                    f.write("%-10s%-30s\n" % (name,str(score)))
+                    f.write("%s,%s\n" % (name,str(score)))
                     f.close()
 
         elif event.button is 3:                                 # Update of tiles to flag or un-flag it
